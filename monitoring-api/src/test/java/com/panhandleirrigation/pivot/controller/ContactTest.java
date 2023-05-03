@@ -46,11 +46,9 @@ class ContactTest {
 		@Test
 		void testGetRequestThatContactIsReturn() {
 			// Given : a get contacts request with valid customer name
-
 			String uri = String.format("%s/contacts?customerKey=%s", getBaseURI(), "A");
 
 			// When : A valid connection is made
-
 			ResponseEntity<List<Contact>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
 					new ParameterizedTypeReference<>() {
 					});
@@ -69,19 +67,19 @@ class ContactTest {
 			List<Contact> list = new ArrayList<Contact>();
 
 			// @formatter:off
-			
 			list.add(Contact.builder()
 					.customerFK(1L)
+					.publicKey("B")
 					.description("Personal Email")
 					.email("bob@gmail.org")
 					.build());
 			
 			list.add(Contact.builder()
 					.customerFK(1L)
+					.publicKey("A")
 					.description("Work Email")
 					.email("bob@banking.net")
 					.build());
-	 
 			// @formatter:on
 
 			Collections.sort(list);
@@ -100,12 +98,8 @@ class ContactTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.BAD_REQUEST, "/contacts");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.BAD_REQUEST, "/contacts");
 		}
 
 		@Test
@@ -119,12 +113,8 @@ class ContactTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.NOT_FOUND, "/contacts");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.NOT_FOUND, "/contacts");
 		}
 
 		@Test
@@ -135,7 +125,7 @@ class ContactTest {
 			String body = "{\n"
 					+ "    \"customerKey\": \"A\",\n"
 					+ "    \"contact\": {\n"
-					+ "        \"contactIndex\": 1,\n"
+					+ "        \"publicKey\": \"A\",\n"
 					+ "        \"description\": \"Old Email\",\n"
 					+ "        \"email\": \"bobby@banking.net\"\n"
 					+ "    }\n"
@@ -160,7 +150,7 @@ class ContactTest {
 
 			// And : A valid contact is returned
 			Contact contact = response.getBody();
-			assertThat(contact.getContactIndex()).isEqualTo(1);
+			assertThat(contact.getPublicKey()).isEqualTo("A");
 			assertThat(contact.getDescription()).isEqualTo("Old Email");
 			assertThat(contact.getEmail()).isEqualTo("bobby@banking.net");
 		}
@@ -194,12 +184,9 @@ class ContactTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.BAD_REQUEST, "/contacts");
 
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.BAD_REQUEST, "/contacts");
 		}
 
 		@ParameterizedTest
@@ -229,12 +216,8 @@ class ContactTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.NOT_FOUND, "/contacts");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.NOT_FOUND, "/contacts");
 		}
 
 		@Test
@@ -245,7 +228,6 @@ class ContactTest {
 			String body = "{\n"
 					+ "    \"customerKey\" : \"B\",\n"
 					+ "    \"contact\" : {\n"
-					+ "        \"contactIndex\": 2,\n"
 					+ "        \"description\" : \"Personal Email\",\n"
 					+ "        \"email\" : \"fred@outlook.com\"\n"
 					+ "    }\n"
@@ -270,7 +252,6 @@ class ContactTest {
 
 			// And : A valid contact is returned
 			Contact contact = response.getBody();
-			assertThat(contact.getContactIndex()).isEqualTo(2);
 			assertThat(contact.getDescription()).isEqualTo("Personal Email");
 			assertThat(contact.getEmail()).isEqualTo("fred@outlook.com");
 		}
@@ -304,12 +285,8 @@ class ContactTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.BAD_REQUEST, "/contacts");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.BAD_REQUEST, "/contacts");
 		}
 
 		@Test
@@ -338,19 +315,15 @@ class ContactTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.NOT_FOUND, "/contacts");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.NOT_FOUND, "/contacts");
 		}
 
 		@Test
 		void testDeleteRequestThatNoContentStatusIsReturned() {
 			// Given : a delete contact request with valid parameters
 
-			String uri = String.format("%s/contacts?customerKey=%s&contactIndex=%d", getBaseURI(), "C", 1);
+			String uri = String.format("%s/contacts?customerKey=%s&contactKey=%s", getBaseURI(), "C", "D");
 
 			// When : A valid connection is made
 
@@ -364,9 +337,9 @@ class ContactTest {
 
 		@ParameterizedTest
 		@MethodSource("com.panhandleirrigation.pivot.controller.ContactTest#parametersForDeleteInvalidRequest")
-		void testDeleteRequestThatBadRequestIsReturnedWithInvalidParameters(String customerKey, int contactKey) {
+		void testDeleteRequestThatBadRequestIsReturnedWithInvalidParameters(String customerKey, String contactKey) {
 			// Given : a delete contact request with invalid parameters
-			String uri = String.format("%s/contacts?customerKey=%s&contactIndex=%d", getBaseURI(), customerKey,
+			String uri = String.format("%s/contacts?customerKey=%s&contactKey=%s", getBaseURI(), customerKey,
 					contactKey);
 
 			// When : A valid connection is made
@@ -375,19 +348,15 @@ class ContactTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.BAD_REQUEST, "/contacts");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.BAD_REQUEST, "/contacts");
 		}
 
 		@ParameterizedTest
 		@MethodSource("com.panhandleirrigation.pivot.controller.ContactTest#parametersForPostUnknownRequest")
-		void testPostRequestThatNotFoundIsReturnedWithUnknownName(String customerKey, int contactIndex) {
+		void testPostRequestThatNotFoundIsReturnedWithUnknownName(String customerKey, String contactIndex) {
 			// Given : a delete contact request with invalid parameters
-			String uri = String.format("%s/contacts?customerKey=%s&contactIndex=%d", getBaseURI(), customerKey,
+			String uri = String.format("%s/contacts?customerKey=%s&contactKey=%s", getBaseURI(), customerKey,
 					contactIndex);
 
 			// When : A valid connection is made
@@ -396,12 +365,8 @@ class ContactTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.NOT_FOUND, "/contacts");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.NOT_FOUND, "/contacts");
 		}
 
 	}
@@ -459,10 +424,10 @@ class ContactTest {
 		//String customerKey, int contactKey
 		return Stream.of(
 			//customer name
-			arguments("*(&(*&*", 1),
+			arguments("*(&(*&*", "A"),
 			
 			//new email
-			arguments("C", 0)
+			arguments("C", "(*&(*")
 		);
 		// @formatter:on
 	}
@@ -471,8 +436,8 @@ class ContactTest {
 		// @formatter:off
 		//String customerName, String targetEmail
 		return Stream.of(
-			arguments("UnknownKey", 1),
-			arguments("C", 2)
+			arguments("UnknownKey", "A"),
+			arguments("C", "UnknownKey")
 		);
 		// @formatter:on
 	}
@@ -499,12 +464,8 @@ class ContactTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.INTERNAL_SERVER_ERROR, "/contacts");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.INTERNAL_SERVER_ERROR, "/contacts");
 		}
 
 		@Test
@@ -515,7 +476,7 @@ class ContactTest {
 			String body = "{\n"
 					+ "    \"customerKey\": \"A\",\n"
 					+ "    \"contact\": {\n"
-					+ "        \"contactIndex\": 1,\n"
+					+ "        \"publicKey\": \"A\",\n"
 					+ "        \"description\": \"Old Email\",\n"
 					+ "        \"email\": \"bobby@banking.net\"\n"
 					+ "    }\n"
@@ -533,7 +494,7 @@ class ContactTest {
 			ContactPut errorBody = new ContactPut();
 			errorBody.setCustomerKey("A");
 			errorBody.setContact(
-					Contact.builder().contactIndex(1).description("Old Email").email("bobby@banking.net").build());
+					Contact.builder().publicKey("A").description("Old Email").email("bobby@banking.net").build());
 
 			doThrow(new RuntimeException("Custom Error")).when(contactService).updateContact(errorBody);
 
@@ -541,12 +502,8 @@ class ContactTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.INTERNAL_SERVER_ERROR, "/contacts");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.INTERNAL_SERVER_ERROR, "/contacts");
 		}
 
 		@Test
@@ -557,7 +514,7 @@ class ContactTest {
 			String body = "{\n"
 					+ "    \"customerKey\" : \"B\",\n"
 					+ "    \"contact\" : {\n"
-					+ "        \"contactIndex\": 2,\n"
+					+ "        \"publicKey\": \"G\",\n"
 					+ "        \"description\" : \"Personal Email\",\n"
 					+ "        \"email\" : \"fred@outlook.com\"\n"
 					+ "    }\n"
@@ -575,7 +532,7 @@ class ContactTest {
 			ContactPost errorBody = new ContactPost();
 			errorBody.setCustomerKey("B");
 			errorBody.setContact(
-					Contact.builder().contactIndex(2).description("Personal Email").email("fred@outlook.com").build());
+					Contact.builder().publicKey("G").description("Personal Email").email("fred@outlook.com").build());
 
 			doThrow(new RuntimeException("Custom Error")).when(contactService).createContact(errorBody);
 
@@ -583,12 +540,8 @@ class ContactTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.INTERNAL_SERVER_ERROR, "/contacts");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.INTERNAL_SERVER_ERROR, "/contacts");
 		}
 
 		@Test
@@ -598,18 +551,14 @@ class ContactTest {
 			String uri = String.format("%s/contacts?customerKey=%s&contactIndex=%d", getBaseURI(), "C", 1);
 
 			// When : A valid connection is made but an error occurs
-			doThrow(new RuntimeException("Custom Error")).when(contactService).deleteContact("C", 1);
+			doThrow(new RuntimeException("Custom Error")).when(contactService).deleteContact("C", "D");
 
 			ResponseEntity<Map<String, Object>> response = restTemplate.exchange(uri, HttpMethod.DELETE, null,
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.INTERNAL_SERVER_ERROR, "/contacts");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.INTERNAL_SERVER_ERROR, "/contacts");
 		}
 	}
 

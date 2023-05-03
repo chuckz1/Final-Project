@@ -22,7 +22,6 @@ public class CustomerPivot implements Comparable<CustomerPivot> {
 	Long customerFK;
 	Long pivotFK;
 	
-	@NotNull
 	@Length(max = 10)
 	@Pattern(regexp = "[\\w\\s]*")
 	String publicKey;

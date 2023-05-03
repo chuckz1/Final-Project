@@ -176,12 +176,9 @@ public class PivotTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.BAD_REQUEST, "/pivots");
 
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.BAD_REQUEST, "/pivots");
 		}
 
 		@Test
@@ -208,12 +205,8 @@ public class PivotTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.NOT_FOUND, "/pivots");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.NOT_FOUND, "/pivots");
 		}
 
 		@Test
@@ -222,7 +215,6 @@ public class PivotTest {
 
 			// @formatter:off
 			String body = "{\n"
-					+ "    \"publicKey\" : \"F\",\n"
 					+ "    \"pivotName\" : \"Long\",\n"
 					+ "    \"errorStatus\" : \"OK\",\n"
 					+ "    \"rotation\" : \"10\"\n"
@@ -247,7 +239,6 @@ public class PivotTest {
 
 			// And : A valid contact is returned
 			Pivot pivot = response.getBody();
-			assertThat(pivot.getPublicKey()).isEqualTo("F");
 			assertThat(pivot.getPivotName()).isEqualTo("Long");
 			assertThat(pivot.getErrorStatus()).isEqualTo(PivotErrorStatus.OK);
 			assertThat(pivot.getRotation()).isEqualTo(new BigDecimal(10).setScale(3));
@@ -280,12 +271,8 @@ public class PivotTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.BAD_REQUEST, "/pivots");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.BAD_REQUEST, "/pivots");
 		}
 
 		@Test
@@ -312,12 +299,8 @@ public class PivotTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.BAD_REQUEST, "/pivots");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.BAD_REQUEST, "/pivots");
 		}
 
 		@Test
@@ -330,12 +313,8 @@ public class PivotTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.NOT_FOUND, "/pivots");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.NOT_FOUND, "/pivots");
 		}
 
 	}
@@ -400,12 +379,8 @@ public class PivotTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.INTERNAL_SERVER_ERROR, "/pivots");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.INTERNAL_SERVER_ERROR, "/pivots");
 		}
 
 		@Test
@@ -444,12 +419,8 @@ public class PivotTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.INTERNAL_SERVER_ERROR, "/pivots");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.INTERNAL_SERVER_ERROR, "/pivots");
 		}
 
 		@Test
@@ -488,12 +459,8 @@ public class PivotTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.INTERNAL_SERVER_ERROR, "/pivots");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.INTERNAL_SERVER_ERROR, "/pivots");
 		}
 
 		@Test
@@ -509,12 +476,8 @@ public class PivotTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.INTERNAL_SERVER_ERROR, "/pivots");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.INTERNAL_SERVER_ERROR, "/pivots");
 		}
 	}
 

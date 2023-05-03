@@ -24,8 +24,7 @@ import lombok.NoArgsConstructor;
 public class Pivot implements Comparable<Pivot>{
 	private Long pivotPK;
 	
-	@NotNull
-	@Length(max = 30)
+	@Length(max = 10)
 	@Pattern(regexp = "[\\w\\s]*")
 	private String publicKey;
 	

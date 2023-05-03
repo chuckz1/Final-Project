@@ -14,5 +14,5 @@ public interface ContactService {
 
 	Contact createContact(ContactPost contactPost);
 
-	void deleteContact(String customerKey, int contactIndex);
+	void deleteContact(String customerKey, String contactKey);
 }

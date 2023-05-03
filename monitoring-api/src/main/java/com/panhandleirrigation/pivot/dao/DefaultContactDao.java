@@ -49,6 +49,7 @@ public class DefaultContactDao implements ContactDao {
 				return Contact.builder()
 						.contactPK(rs.getLong("contact_pk"))
 						.customerFK(rs.getLong("customer_fk"))
+						.publicKey(rs.getString("contact_key"))
 						.description(rs.getString("description"))
 						.email(rs.getString("email"))
 						.build();
@@ -58,18 +59,18 @@ public class DefaultContactDao implements ContactDao {
 	}
 
 	@Override
-	public Optional<Contact> getContactByCustomerFKandIndex(Long customerPK, int contactIndex) {
+	public Optional<Contact> getContactByCustomerFKandPK(Long customerPK, Long contactPK) {
 		// @formatter:off
-		String sql = ""
-				+ "SELECT * "
-				+ "FROM contacts "
-				+ "WHERE customer_fk = :customer_pk "
-				+ "AND contact_index = :contactIndex";
-		// @formatter:on
+				String sql = ""
+						+ "SELECT * "
+						+ "FROM contacts "
+						+ "WHERE customer_fk = :customer_pk "
+						+ "AND contact_pk = :contactPK";
+				// @formatter:on
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("customer_pk", customerPK);
-		params.put("contactIndex", contactIndex);
+		params.put("contactPK", contactPK);
 
 		return Optional.of(jdbcTemplate.query(sql, params, new ResultSetExtractor<Contact>() {
 
@@ -77,14 +78,14 @@ public class DefaultContactDao implements ContactDao {
 			public Contact extractData(ResultSet rs) throws SQLException, DataAccessException {
 				rs.next();
 				// @formatter:off
-				return Contact.builder()
-						.contactPK(rs.getLong("contact_pk"))
-						.customerFK(rs.getLong("customer_fk"))
-						.contactIndex(rs.getInt("contact_index"))
-						.description(rs.getString("description"))
-						.email(rs.getString("email"))
-						.build();
-				// @formatter:on
+						return Contact.builder()
+								.contactPK(rs.getLong("contact_pk"))
+								.customerFK(rs.getLong("customer_fk"))
+								.publicKey(rs.getString("contact_key"))
+								.description(rs.getString("description"))
+								.email(rs.getString("email"))
+								.build();
+						// @formatter:on
 			}
 		}));
 	}
@@ -105,7 +106,7 @@ public class DefaultContactDao implements ContactDao {
 		params.put("description", target.getDescription());
 		params.put("email", target.getEmail());
 		params.put("contact_pk", target.getContactPK());
-		
+
 		jdbcTemplate.update(sql, params);
 
 		return getContactByPK(target.getContactPK());
@@ -132,7 +133,7 @@ public class DefaultContactDao implements ContactDao {
 				// @formatter:off
 				return Contact.builder()
 					.contactPK(rs.getLong("contact_pk"))
-					.contactIndex(rs.getInt("contact_index"))
+					.publicKey(rs.getString("contact_key"))
 					.customerFK(rs.getLong("customer_fk"))
 					.description(rs.getString("description"))
 					.email(rs.getString("email"))
@@ -147,15 +148,15 @@ public class DefaultContactDao implements ContactDao {
 		// @formatter:off
 		String sql = ""
 				+ "INSERT INTO contacts ("
-				+ "customer_fk, contact_index, description, email"
+				+ "customer_fk, contact_key, description, email"
 				+ ") VALUES ("
-				+ ":customer_fk, :contact_index, :description, :email"
+				+ ":customer_fk, :contactKey, :description, :email"
 				+ ")";
 		// @formatter:on
 
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("customer_fk", contact.getCustomerFK());
-		params.addValue("contact_index", contact.getContactIndex());
+		params.addValue("contactKey", contact.getPublicKey());
 		params.addValue("description", contact.getDescription());
 		params.addValue("email", contact.getEmail());
 
@@ -168,21 +169,65 @@ public class DefaultContactDao implements ContactDao {
 	}
 
 	@Override
-	public int deleteContact(Long customerPK, int contactIndex) {
+	public int deleteContact(Long customerPK, Long contactPK) {
 		// @formatter:off
 		String sql = ""
 				+ "DELETE FROM "
 				+ "contacts "
 				+ "WHERE customer_fk = :customerPK "
-				+ "AND contact_index = :contactIndex";
+				+ "AND contact_pk = :contactPK";
 		// @formatter:on
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("customerPK", customerPK);
-		params.put("contactIndex", contactIndex);
+		params.put("contactPK", contactPK);
 
 		// delete contact
 		return jdbcTemplate.update(sql, params);
+	}
+
+	@Override
+	public Optional<Long> convertKeyToPK(String publicKey) {
+		// @formatter:off
+		String sql = ""
+				+ "SELECT contact_pk "
+				+ "FROM contacts "
+				+ "WHERE contact_key = :publicKey";
+		// @formatter:on
+
+		Map<String, Object> params = new HashMap<>();
+		params.put("publicKey", publicKey);
+
+		return Optional.ofNullable(jdbcTemplate.query(sql, params, new ResultSetExtractor<Long>() {
+
+			@Override
+			public Long extractData(ResultSet rs) throws SQLException, DataAccessException {
+				rs.next();
+				return rs.getLong("contact_pk");
+			}
+		}));
+	}
+
+	@Override
+	public Optional<String> convertPKtoString(Long contactPK) {
+		// @formatter:off
+		String sql = ""
+				+ "SELECT contact_key "
+				+ "FROM customers "
+				+ "WHERE contact_pk = :contactPK";
+		// @formatter:on
+
+		Map<String, Object> params = new HashMap<>();
+		params.put("contactPK", contactPK);
+
+		return Optional.ofNullable(jdbcTemplate.query(sql, params, new ResultSetExtractor<String>() {
+
+			@Override
+			public String extractData(ResultSet rs) throws SQLException, DataAccessException {
+				rs.next();
+				return rs.getString("contact_key");
+			}
+		}));
 	}
 
 }

@@ -81,36 +81,6 @@ public class DefaultCustomerDao implements CustomerDao {
 	}
 
 	@Override
-	public Optional<Customer> getCustomerFromName(String targetName) {
-		// TODO Auto-generated method stub
-		// @formatter:off
-		String sql = ""
-				+ "SELECT * " 
-				+ "FROM customers " 
-				+ "WHERE customer_name = :targetName " 
-				+ "LIMIT 1";
-		// @formatter:on
-
-		Map<String, Object> params = new HashMap<>();
-		params.put("targetName", targetName);
-
-		return Optional.ofNullable(jdbcTemplate.query(sql, params, new ResultSetExtractor<Customer>() {
-
-			@Override
-			public Customer extractData(ResultSet rs) throws SQLException, DataAccessException {
-				rs.next();
-				// @formatter:off
-				return Customer.builder()
-						.customerPK(rs.getLong("customer_pk"))
-						.publicKey(rs.getString("customer_key"))
-						.customerName(rs.getString("customer_name"))
-						.build();
-				// @formatter:on
-			}
-		}));
-	}
-
-	@Override
 	public Optional<Customer> updateCustomer(Customer customer) {
 		log.info("DAO: Atempting to update customer");
 

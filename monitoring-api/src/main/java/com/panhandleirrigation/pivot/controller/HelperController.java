@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 
 @Validated
-@RequestMapping("/pivots/customers")
+@RequestMapping("/pivots/helper")
 @OpenAPIDefinition(info = @Info(title = "Pivot Monitoring API"), servers = {
 		@Server(url = "http://localhost:8080", description = "Local Server.") })
 public interface HelperController {
@@ -57,5 +57,5 @@ public interface HelperController {
 		)
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
-	String generateKey(@RequestParam String table, @RequestParam(required = false) String column);
+	String generateKey(@RequestParam String table, @RequestParam String column);
 }

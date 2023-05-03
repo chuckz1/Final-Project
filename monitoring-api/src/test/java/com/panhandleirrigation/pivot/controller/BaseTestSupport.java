@@ -2,12 +2,20 @@ package com.panhandleirrigation.pivot.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import com.panhandleirrigation.pivot.entity.Contact;
 
 public class BaseTestSupport {
 
@@ -20,8 +28,15 @@ public class BaseTestSupport {
 	protected String getBaseURI() {
 		return String.format("http://localhost:%d/pivots", serverPort);
 	}
-	
-	protected void assertErrorMessageValid(Map<String, Object> error, HttpStatus status, String uri) {
+
+	protected void assertErrorMessageValid(ResponseEntity<Map<String, Object>> response, HttpStatus status,
+			String uri) {
+		// Then : assert that correct status is returned
+		assertThat(response.getStatusCode()).isEqualTo(status);
+
+		// And : the correct error message is returned
+		Map<String, Object> error = response.getBody();
+
 		// @formatter:off
 		assertThat(error)
 			.containsKey("message")

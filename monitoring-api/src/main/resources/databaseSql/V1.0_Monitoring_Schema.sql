@@ -23,8 +23,8 @@ CREATE TABLE customers (
 CREATE TABLE contacts (
   contact_pk INT unsigned NOT NULL AUTO_INCREMENT,
   customer_fk INT unsigned NOT NULL,
-  contact_index TINYINT unsigned not null,
-  description VARCHAR(50), 
+  contact_key VARCHAR(10) not null,
+  description VARCHAR(50),
   email VARCHAR(50) NOT NULL,
   PRIMARY KEY (contact_pk),
   FOREIGN KEY (customer_fk) REFERENCES customers (customer_pk) ON DELETE CASCADE

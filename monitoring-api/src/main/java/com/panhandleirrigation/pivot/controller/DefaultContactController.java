@@ -38,9 +38,9 @@ public class DefaultContactController implements ContactController {
 	}
 
 	@Override
-	public void deleteContact(String customerKey, int contactIndex) {
-		log.info("Contact " + contactIndex + " is being deleted for customer key " + customerKey);
-		contactService.deleteContact(customerKey, contactIndex);
+	public void deleteContact(String customerKey, String contactKey) {
+		log.info("Contact " + contactKey + " is being deleted for customer key " + customerKey);
+		contactService.deleteContact(customerKey, contactKey);
 	}
 
 }

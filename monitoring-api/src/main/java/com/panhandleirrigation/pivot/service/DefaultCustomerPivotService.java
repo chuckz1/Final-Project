@@ -27,6 +27,9 @@ public class DefaultCustomerPivotService implements CustomerPivotService {
 
 	@Autowired
 	CustomerPivotDao customerPivotDao;
+	
+	@Autowired
+	HelperService helperService;
 
 	@Override
 	public List<CustomerPivot> fetchCustomerPivotsByCustomerKey(String customerKey) {
@@ -56,6 +59,8 @@ public class DefaultCustomerPivotService implements CustomerPivotService {
 		customerPivot.setPivotFK(
 				pivotDao.convertKeyToPK(customerPivot.getPivotKey()).orElseThrow(() -> new NoSuchElementException(
 						"Pivot with key = " + customerPivot.getPivotKey() + " was not found")));
+		
+		customerPivot.setPublicKey(helperService.generateKey("customer_pivots", "public_key"));
 
 		CustomerPivot result = customerPivotDao.createCustomerPivot(customerPivot)
 				.orElseThrow(() -> new RuntimeException(

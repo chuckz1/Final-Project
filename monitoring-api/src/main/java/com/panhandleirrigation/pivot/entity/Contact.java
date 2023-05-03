@@ -23,9 +23,9 @@ public class Contact implements Comparable<Contact> {
 	private Long contactPK;
 	private Long customerFK;
 	
-	@NotNull
-	@Positive
-	private int contactIndex;
+	@Length(max = 10)
+	@Pattern(regexp = "[\\w\\s]*")
+	private String publicKey;
 
 	@NotNull
 	@Length(max = 30)

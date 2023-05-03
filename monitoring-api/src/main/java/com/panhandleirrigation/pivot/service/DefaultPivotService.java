@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.panhandleirrigation.pivot.dao.HelperDao;
 import com.panhandleirrigation.pivot.dao.PivotDao;
 import com.panhandleirrigation.pivot.entity.Pivot;
 
@@ -19,6 +20,9 @@ public class DefaultPivotService implements PivotService {
 
 	@Autowired
 	PivotDao pivotDao;
+
+	@Autowired
+	HelperService helperService;
 
 	@Override
 	public List<Pivot> fetchPivots() {
@@ -33,10 +37,10 @@ public class DefaultPivotService implements PivotService {
 	@Override
 	public Pivot updatePivot(Pivot pivot) {
 		log.info("Service Layer: pivot is being updated: " + pivot.getPublicKey());
-		
+
 		pivot.setPivotPK(pivotDao.convertKeyToPK(pivot.getPublicKey()).orElseThrow(
 				() -> new NoSuchElementException("Pivot with key = " + pivot.getPublicKey() + " could not be found")));
-		
+
 		return pivotDao.updatePivot(pivot).orElseThrow(
 				() -> new NoSuchElementException("Pivot with key = " + pivot.getPublicKey() + " could not be updated"));
 	}
@@ -44,8 +48,14 @@ public class DefaultPivotService implements PivotService {
 	@Override
 	public Pivot createPivot(Pivot pivot) {
 		log.info("Service lauer: A new pivot is being created");
-		return pivotDao.createPivot(pivot).orElseThrow(
-				() -> new NoSuchElementException("Pivot with key = " + pivot.getPublicKey() + " could not be created"));
+
+		if (pivot.getPublicKey() == null) {
+			// create a unique key for the pivot
+			pivot.setPublicKey(helperService.generateKey("pivots", "pivot_key"));
+		}
+
+		return pivotDao.createPivot(pivot).orElseThrow(() -> new NoSuchElementException(
+				"Pivot with name = " + pivot.getPivotName() + " could not be created"));
 	}
 
 	@Override

@@ -9,12 +9,12 @@ INSERT INTO customers (customer_pk, customer_key, customer_name) VALUES(2, 'B', 
 INSERT INTO customers (customer_pk, customer_key, customer_name) VALUES(3, 'C', 'Steve');
 INSERT INTO customers (customer_pk, customer_key, customer_name) VALUES(4, 'D', 'Jones');
 
-INSERT INTO contacts (customer_fk, contact_index, description, email) VALUES(1, 1, 'Work Email', 'bob@banking.net');
-INSERT INTO contacts (customer_fk, contact_index, description, email) VALUES(1, 2, 'Personal Email', 'bob@gmail.org');
-INSERT INTO contacts (customer_fk, contact_index, description, email) VALUES(2, 1, 'Work Email', 'fred@banking.net');
-INSERT INTO contacts (customer_fk, contact_index, description, email) VALUES(3, 1, 'Work Email', 'steve@banking.net');
-INSERT INTO contacts (customer_fk, contact_index, description, email) VALUES(4, 1, 'Work Email', 'jones@banking.net');
-INSERT INTO contacts (customer_fk, contact_index, description, email) VALUES(4, 2, 'Personal Email', 'jones@hotmail.gov');
+INSERT INTO contacts (customer_fk, contact_key, description, email) VALUES(1, 'A', 'Work Email', 'bob@banking.net');
+INSERT INTO contacts (customer_fk, contact_key, description, email) VALUES(1, 'B', 'Personal Email', 'bob@gmail.org');
+INSERT INTO contacts (customer_fk, contact_key, description, email) VALUES(2, 'C', 'Work Email', 'fred@banking.net');
+INSERT INTO contacts (customer_fk, contact_key, description, email) VALUES(3, 'D', 'Work Email', 'steve@banking.net');
+INSERT INTO contacts (customer_fk, contact_key, description, email) VALUES(4, 'E', 'Work Email', 'jones@banking.net');
+INSERT INTO contacts (customer_fk, contact_key, description, email) VALUES(4, 'F', 'Personal Email', 'jones@hotmail.gov');
 
 INSERT INTO customer_pivots (customer_fk, pivot_fk, public_key) VALUES(1, 2, 'A');
 INSERT INTO customer_pivots (customer_fk, pivot_fk, public_key) VALUES(1, 3, 'B');

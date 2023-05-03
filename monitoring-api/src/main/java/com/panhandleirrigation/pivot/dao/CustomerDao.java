@@ -9,8 +9,6 @@ public interface CustomerDao {
 
 	List<Customer> fetchCustomers();
 
-	Optional<Customer> getCustomerFromName(String targetName);
-
 	Optional<Customer> updateCustomer(Customer target);
 
 	Optional<Customer> getCustomerFromKey(String targetKey);

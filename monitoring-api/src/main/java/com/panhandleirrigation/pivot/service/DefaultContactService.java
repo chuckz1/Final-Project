@@ -27,6 +27,9 @@ public class DefaultContactService implements ContactService {
 	@Autowired
 	ContactDao contactDao;
 
+	@Autowired
+	HelperService helperService;
+
 	@Transactional(readOnly = true)
 	@Override
 	public List<Contact> fetchContactsByKey(String customerKey) {
@@ -54,10 +57,14 @@ public class DefaultContactService implements ContactService {
 				.orElseThrow(() -> new NoSuchElementException(
 						"Customer with key = " + contactPut.getCustomerKey() + " was not found"));
 
-		// get the contact to change
-		Contact target = contactDao.getContactByCustomerFKandIndex(customerPK, contactPut.getContact().getContactIndex())
+		Long contactPK = contactDao.convertKeyToPK(contactPut.getContact().getPublicKey())
 				.orElseThrow(() -> new NoSuchElementException(
-						"Contact with index = " + contactPut.getContact().getContactIndex() + " was not found"));
+						"Contact with key = " + contactPut.getContact().getPublicKey() + " was not found"));
+
+		// get the contact to change
+		Contact target = contactDao.getContactByCustomerFKandPK(customerPK, contactPK)
+				.orElseThrow(() -> new NoSuchElementException(
+						"Contact with key = " + contactPut.getContact().getPublicKey() + " was not found"));
 
 		// modify the target
 		target.setDescription(contactPut.getContact().getDescription());
@@ -76,6 +83,13 @@ public class DefaultContactService implements ContactService {
 		Long customerPK = customerDao.convertKeyToPK(contactPost.getCustomerKey())
 				.orElseThrow(() -> new NoSuchElementException(
 						"Customer with key = " + contactPost.getCustomerKey() + " was not found"));
+
+		// get public key
+		if (contactPost.getContact().getPublicKey() == null) {
+			log.info("Changing public key");
+			contactPost.getContact().setPublicKey(helperService.generateKey("contacts", "contact_key"));
+		}
+
 		// modify new contact
 		Contact newContact = contactPost.getContact();
 		newContact.setCustomerFK(customerPK);
@@ -87,11 +101,14 @@ public class DefaultContactService implements ContactService {
 
 	@Transactional
 	@Override
-	public void deleteContact(String customerKey, int contactIndex) {
+	public void deleteContact(String customerKey, String contactKey) {
 		Long customerPK = customerDao.convertKeyToPK(customerKey)
 				.orElseThrow(() -> new NoSuchElementException("Customer with key = " + customerKey + " was not found"));
 
-		int count = contactDao.deleteContact(customerPK, contactIndex);
+		Long contactPK = contactDao.convertKeyToPK(contactKey)
+				.orElseThrow(() -> new NoSuchElementException("Contact with key = " + contactKey + " was not found"));
+
+		int count = contactDao.deleteContact(customerPK, contactPK);
 
 		if (count < 1) {
 			throw new DataIntegrityViolationException(

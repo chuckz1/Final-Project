@@ -9,15 +9,19 @@ public interface ContactDao {
 
 	List<Contact> getContactsByCustomerFK(Long customerPK);
 	
-	Optional<Contact> getContactByCustomerFKandIndex(Long customerPK, int contactIndex);
+	Optional<Contact> getContactByCustomerFKandPK(Long customerPK, Long contactPK);
 
 	Optional<Contact> updateContact(Contact target);
 	
-	Optional<Contact> getContactByPK(Long key);
+	Optional<Contact> getContactByPK(Long contactPK);
 
 	Optional<Contact> createContact(Contact contact);
 
-	int deleteContact(Long customerPK, int contactIndex);
+	int deleteContact(Long customerPK, Long contactPK);
+	
+	Optional<Long> convertKeyToPK(String publicKey);
+	
+	Optional<String> convertPKtoString(Long contactPK);
 
 	
 }

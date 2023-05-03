@@ -150,12 +150,9 @@ class CustomerTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.BAD_REQUEST, "/customers");
 
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.BAD_REQUEST, "/customers");
 		}
 
 		@Test
@@ -180,12 +177,8 @@ class CustomerTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : assert that Bad request status is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-
-			// And : the correct error message is returned
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.NOT_FOUND, "/customers");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.NOT_FOUND, "/customers");
 		}
 	}
 
@@ -221,11 +214,8 @@ class CustomerTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : an internal server error is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.INTERNAL_SERVER_ERROR, "/customers");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.INTERNAL_SERVER_ERROR, "/customers");
 		}
 
 		@Test
@@ -254,11 +244,8 @@ class CustomerTest {
 					new ParameterizedTypeReference<>() {
 					});
 
-			// Then : an internal server error is returned
-			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
-			Map<String, Object> error = response.getBody();
-			assertErrorMessageValid(error, HttpStatus.INTERNAL_SERVER_ERROR, "/customers");
+			// Then : assert that the correct error is returned
+			assertErrorMessageValid(response, HttpStatus.INTERNAL_SERVER_ERROR, "/customers");
 		}
 	}
 

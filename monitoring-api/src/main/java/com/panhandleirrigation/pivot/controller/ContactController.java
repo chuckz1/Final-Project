@@ -167,9 +167,9 @@ public interface ContactController {
 					required = true,
 					description = "The customer key of the contact to delete"),
 				@Parameter(
-						name = "contactIndex", 
+						name = "contactKey", 
 						required = true,
-						description = "The index of the contact to delete")
+						description = "The key of the contact to delete")
 			}
 		)
 	@DeleteMapping
@@ -182,8 +182,9 @@ public interface ContactController {
 			String customerKey, 
 			@RequestParam
 			@NotNull
-			@Positive
-			int contactIndex
+			@Length(max = 10) 
+			@Pattern(regexp = "[\\w\\s]*") 
+			String contactKey
 		);
 		
 	// @formatter:on
