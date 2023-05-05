@@ -17,14 +17,11 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
-import com.panhandleirrigation.pivot.entity.Customer;
 import com.panhandleirrigation.pivot.entity.Pivot;
 import com.panhandleirrigation.pivot.entity.PivotErrorStatus;
 
-import lombok.extern.slf4j.Slf4j;
 
 @Component
-@Slf4j
 public class DefaultPivotDao implements PivotDao {
 
 	@Autowired

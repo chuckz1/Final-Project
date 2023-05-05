@@ -30,12 +30,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
-import com.panhandleirrigation.pivot.entity.Contact;
-import com.panhandleirrigation.pivot.entity.ContactPost;
-import com.panhandleirrigation.pivot.entity.ContactPut;
 import com.panhandleirrigation.pivot.entity.Pivot;
 import com.panhandleirrigation.pivot.entity.PivotErrorStatus;
-import com.panhandleirrigation.pivot.service.ContactService;
 import com.panhandleirrigation.pivot.service.PivotService;
 
 public class PivotTest {

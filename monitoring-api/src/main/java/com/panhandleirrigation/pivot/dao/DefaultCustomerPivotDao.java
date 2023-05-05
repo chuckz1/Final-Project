@@ -11,19 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
-import com.panhandleirrigation.pivot.entity.Contact;
 import com.panhandleirrigation.pivot.entity.CustomerPivot;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Component
-@Slf4j
 public class DefaultCustomerPivotDao implements CustomerPivotDao {
 
 	@Autowired

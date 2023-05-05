@@ -13,10 +13,7 @@ import com.panhandleirrigation.pivot.dao.CustomerPivotDao;
 import com.panhandleirrigation.pivot.dao.PivotDao;
 import com.panhandleirrigation.pivot.entity.CustomerPivot;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class DefaultCustomerPivotService implements CustomerPivotService {
 
 	@Autowired

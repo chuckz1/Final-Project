@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.panhandleirrigation.pivot.dao.HelperDao;
 import com.panhandleirrigation.pivot.dao.PivotDao;
 import com.panhandleirrigation.pivot.entity.Pivot;
 

@@ -16,14 +16,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import com.panhandleirrigation.pivot.entity.Contact;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Component
-@Slf4j
 public class DefaultContactDao implements ContactDao {
 
 	@Autowired

@@ -14,10 +14,7 @@ import org.springframework.stereotype.Component;
 import com.panhandleirrigation.pivot.entity.TableName;
 import com.panhandleirrigation.pivot.entity.ValidKeyGenerated;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Component
-@Slf4j
 public class DefaultHelperDao implements HelperDao {
 
 	@Autowired
